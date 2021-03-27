@@ -1,6 +1,7 @@
-**RoboCopy Archive - An ArcGIS Script Tool To Archive Incident Data**
+# RoboCopy Archive - An ArcGIS Script Tool To Archive Incident Data
 
-**Background** - Creating and maintaining a comprehensive digital
+## Background
+Creating and maintaining a comprehensive digital
 archive of an incident\'s GIS data, projects, and products is a critical
 performance element for a GISS. Commercially available software
 facilitates archiving, but many GISS may not have access to these
@@ -42,13 +43,13 @@ data edit and map update cycle in the sequence described below.
 
 4.  Update the incident archive using **RoboCopy Archive**.
 
-![alt_text](media/image1.png){width="2.0118055555555556in"
+![arcgis catalog screenshot](media/image1.png){width="2.0118055555555556in"
 height="0.9409722222222222in"}**Setup** - Copy the **RoboCopyArchive**
 folder to the incident\'s **tools** folder. The toolbox, script, and
 guidance document will be visible when viewed in ArcCatalog, as
 illustrated at right.
 
-![](..\git\docs\media\image2.png){width="2.7868055555555555in"
+![image2](media/image2.png){width="2.7868055555555555in"
 height="1.5333333333333334in"}**Use** - Double-click the **RoboCopy
 Archive** script icon and specify:
 
@@ -62,21 +63,21 @@ Then click **OK**, and the archive session will commence. When complete,
 a log file listing and summarizing the session\'s transactions will be
 displayed, as seen below.
 
-![](..\git\docs\media\image3.png){width="6.345833333333333in"
+![image3](media/image3.png){width="6.345833333333333in"
 height="3.216666666666667in"}
 
-![](..\git\docs\media\image4.png){width="6.347222222222222in"
+![image4](media/image4.png){width="6.347222222222222in"
 height="3.216666666666667in"}
 
-**Results** -
-![](..\git\docs\media\image5.png){width="1.823611111111111in"
+## Results
+![image5](media/image5.png){width="1.823611111111111in"
 height="1.6055555555555556in"}The result of an archive session is that
 all new, modified, and renamed files and folders will be copied to the
 archive folder. The **ArchiveLogs** folder accumulates each session\'s
 log files, as seen here.
 
-**Other considerations** - The RoboCopy Archive tool has these
-characteristics.
+## Other considerations 
+The RoboCopy Archive tool has these characteristics.
 
 -   The tool does not \"mirror\" source data in the archive. In other
     words, if files or folders are deleted from the source, those items
@@ -94,7 +95,7 @@ characteristics.
     copied items. They are, however, shown in the \"**Dirs:**\" category
     in the log file\'s summary.
 
--   The tool will skip open or locked files. In order to avoid an
+-   The tool will skip open or locked files if this option is selected. In order to avoid an
     incomplete archive session, it is highly recommended that all users
     close out of ArcMap or Pro and reboot their PC to release any file
     locks or hung processes, and then take a short break (have a
@@ -102,7 +103,7 @@ characteristics.
     or locked files only once, and then will move on. Users are notified
     when files fail to copy, as illustrated below.
 
-![](..\git\docs\media\image6.png){width="6.440277777777778in"
+![image6](media/image6.png){width="6.440277777777778in"
 height="2.2888888888888888in"}
 
 Carl Beyerhelm
