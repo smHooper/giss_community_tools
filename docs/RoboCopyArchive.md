@@ -42,7 +42,7 @@ data edit and map update cycle in the sequence described below.
 
 4.  Update the incident archive using **RoboCopy Archive**.
 
-![](..\git\docs\media\image1.png){width="2.0118055555555556in"
+![alt_text](media/image1.png){width="2.0118055555555556in"
 height="0.9409722222222222in"}**Setup** - Copy the **RoboCopyArchive**
 folder to the incident\'s **tools** folder. The toolbox, script, and
 guidance document will be visible when viewed in ArcCatalog, as
