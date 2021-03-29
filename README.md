@@ -26,14 +26,14 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about">About The Project</a>
+      <a href="#about">About the project</a>
     </li>
     <li><a href="#requirements">Prerequisites</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a>
       <ul>
-        <li><a href="using-in-arcgispro">Using in ArcGIS Pro</a></li>
-        <li><a href="using-from-the-command-line">Using from the command line</a></li>
+        <li><a href="#using-in-arcgis-pro">Using in ArcGIS Pro</a></li>
+        <li><a href="#using-from-the-command-line">Using from the command line</a></li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -95,7 +95,9 @@ Example:
 ```
 python giss_community_tools_standard.pyt RoboCopyArchive c:\path\to\incident\root c:\path\to\target\archive\folder
 ``` 
-Note that some arguments for running tools from the command line are slightly different than parameters in the tools GUI dialog in ArcGIS Pro. For instance, `CalculateGeometryAttribtes` accepts the EPSG numeric code for the incident spatial reference rather than the tool dialog's direct reference to a Spatial Reference object. To get detailed information on input parameters and other information, run `python giss_community_tools_standard.pyt <tool_class_name> -h` or `--help` to get argument info.
+To get generic help run `python giss_community_tools_standard.pyt -h` or `python giss_community_tools_standard.pyt --help`
+
+Note that some arguments for running tools from the command line are slightly different than parameters in the tools GUI dialog in ArcGIS Pro. For instance, `CalculateGeometryAttribtes` accepts the EPSG numeric code for the incident spatial reference rather than the tool dialog's direct reference to a Spatial Reference object. To get detailed information on input parameters and other information, run `python giss_community_tools_standard.pyt <tool_class_name> -h` or `python giss_community_tools_standard.pyt <tool_class_name> --help` to get argument info.
 
 
 
@@ -105,9 +107,9 @@ Note that some arguments for running tools from the command line are slightly di
 We _gladly accept_ contributions for new tools, new features, and bug fixes from the GISS community (hence the name of the project!). To contribute:
 
 1. Fork the project
-2. Create your feature branch with an informative name (`git checkout -b feature/AmazingFeature` )
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+2. Create your feature branch with an informative name (`git checkout -b feature/cool-feature` )
+3. Commit your changes (`git commit -m 'Add some cool-feature'`)
+4. Push to the branch (`git push origin feature/cool-feature`)
 5. Open a pull request
 
 All new tools should be added to the [Beta toolbox](https://github.com/smHooper/giss_community_tools). With time and discussion among users and contributors, beta tools can be moved to the Standard toolbox. [Submit an issue](https://github.com/smHooper/giss_community_tools/issues) if you would like a tool in the Beta toolbox to be considered for the Standard toolbox.
@@ -133,9 +135,3 @@ Project Link: [https://github.com/smHooper/giss_community_tools](https://github.
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 * Most **Community GISS Tools** were originally developed by Carl Beyerhelm. The GISS community owes a huge thanks to Carl for all of his efforts!
-
-
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
