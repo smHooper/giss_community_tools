@@ -1065,6 +1065,9 @@ class RoboCopyArchive(object):
             new, or that have been modified since the previous copy session (an incremental backup).
             The script will not copy open or locked files (files that are in use).
         '''.replace('\n            ', ' ')
+        file_path, filename = os.path.split(os.path.abspath(__file__))
+        basename, file_ext = os.path.splitext(filename)
+        self.stylesheet = os.path.join(file_path, 'docs', 'stylesheets', '%s.%s.pyt.xml' % (basename, self.label))
         # For some reason, Python toolbox tools fail to run in Desktop unless self.canRunInBackground is False
         if not running_from_pro(warning=False):
             self.canRunInBackground = False
@@ -1211,6 +1214,391 @@ class RoboCopyArchive(object):
             target_dir=parameters[1].valueAsText,
             exclude_locks=parameters[2].value
         )  # returns nothing, but that might change in the future
+
+
+
+class FireProgression(object):
+    """
+    DESCRIPTION:
+    This script tool copies all folders and files within a user-specified folder to an
+    existing user-specified archive folder.  The initial copy session copies all folders and
+    files (a full backup).  Subsequent copy sessions copy only folders and files that are
+    new, or that have been modified since the previous copy session (an incremental backup).
+    The script will not copy open or locked files (files that are in use).
+
+    REQUIREMENTS:
+    ArcGIS 10.x or Pro 2.x at any license level
+
+    USAGE:
+    The user must specify an existing source folder, and an existing target folder.
+
+    DISCLAIMER:
+    This script is made available for other's use on an "as is" basis, with no warranty,
+    either expressed or implied, as to its fitness for any particular purpose.
+
+    AUTHOR:
+    Carl Beyerhelm, Circle-5 GeoServices LLC, circle5geo@gmail.com, 928.607.3517
+    Updated March, 2021 by Sam Hooper, sam_hooper@firenet.gov
+
+    HISTORY:
+    19 Nov 2017 - Develop initial code and test
+    20 Nov 2017 - Add code to create time-stamped log files
+    04 Dec 2017 - Modify RoboCopy switches
+    15 Mar 2021 - Added option to exclude all .lock files - Sam Hooper
+    22 Mar 2021 - Migrate to Python toolbox
+    """
+
+    def __init__(self):
+        self.label = 'RoboCopyArchive'
+        self.description = '''
+            This script tool copies all folders and files within a user-specified folder to an
+            existing user-specified archive folder.  The initial copy session copies all folders and
+            files (a full backup).  Subsequent copy sessions copy only folders and files that are
+            new, or that have been modified since the previous copy session (an incremental backup).
+            The script will not copy open or locked files (files that are in use).
+        '''.replace('\n            ', ' ')
+        file_path, filename = os.path.split(os.path.abspath(__file__))
+        basename, file_ext = os.path.splitext(filename)
+        self.stylesheet = os.path.join(file_path, 'docs', 'stylesheets', '%s.%s.pyt.xml' % (basename, self.label))
+        # For some reason, Python toolbox tools fail to run in Desktop unless self.canRunInBackground is False
+        if not running_from_pro(warning=False):
+            self.canRunInBackground = False
+
+
+    def getParameterInfo(self):
+        """
+        This method is required by all Python Toolbox tools. It needs to return a list of parameters. Change the order
+        here to rearrange the order of parameters in the tool dialog.
+        """
+        event_geodatabase = arcpy.Parameter(
+            displayName='''Specify the incident's Event geodatabase''',
+            name='event_geodatabase',
+            datatype='DEWorkspace',
+            parameterType='Required',
+            direction='Input'
+        )
+
+        spatial_reference = arcpy.Parameter(
+            displayName='''Specify the incident's projected spatial reference''',
+            name='spatial_reference',
+            datatype='GPSpatialReference',
+            parameterType='Required',
+            direction='Input'
+        )
+
+        exclude_locks = arcpy.Parameter(
+            displayName='Exclude all .lock files from the archive',
+            name='exclude_locks',
+            datatype='GPBoolean',
+            parameterType='Required',
+            direction='Input'
+        )
+        exclude_locks.value = True
+
+        return [
+            root_dir_path,
+            target_dir,
+            exclude_locks
+        ]
+
+
+    def updateParameters(self, parameters):
+        """Modify the values and properties of parameters before internal
+        validation is performed.  This method is called whenever a parameter
+        has been changed."""
+
+        #root_dir_path, date_stamp, backup_projects, zip_gdbs = parameters
+
+        return
+
+
+    def updateMessages(self, parameters):
+        """Modify the messages created by internal validation for each tool
+        parameter.  This method is called after internal validation."""
+
+        # Check that the specified incident and target directory exist
+        root_dir_path, target_dir_path, exclude_locks = parameters
+        if root_dir_path.value:
+            if not os.path.isdir(root_dir_path.valueAsText):
+                root_dir_path.setErrorMessage('The specified path does not exist or is not a directory')
+            else:
+                root_dir_path.clearMessage()
+
+        if target_dir_path.value:
+            if not os.path.isdir(target_dir_path.valueAsText):
+                target_dir_path.setErrorMessage('The specified path does not exist or is not a directory')
+            else:
+                target_dir_path.clearMessage()
+
+        return
+
+
+    def isLicensed(self):
+        """Set whether tool is licensed to execute."""
+        return True
+
+
+    def robo_copy_archive(self, source_dir=None, target_dir=None, exclude_locks=False):
+        """
+        Helper function to be able to call script from either Toolbox dialog or command line with other arguments
+        """
+
+
+        try:
+        arcpy.AddMessage(
+            "\n\n" + "Update Fire Progression was developed by Carl Beyerhelm, Circle-5 GeoServices LLC." + "\n")
+
+        # Accept user inputs.
+        eventGDB = arcpy.GetParameterAsText(0)  ## The incident's Event geodatabase
+        inSR = arcpy.GetParameter(1)  ## The incident's user-specified spatial reference
+        fcInputs = arcpy.GetParameterAsText(2)  ## A date-ordered list of fire perimeter polygons
+        clipOK = arcpy.GetParameterAsText(3)  ## A flag to clip previous inputs with subsequent inputs
+        startDate = arcpy.GetParameterAsText(5)  ## A starting date for consecutively dated inputs
+
+        # Set variables.
+        gdb_basename, _ = os.path.splitext(eventGDB)
+        progGDB = gdb_basename + "_progression.gdb"  ## A name for the fire progression GDB
+        dataFolder = os.path.dirname(eventGDB)  ## The INCIDENT_DATA folder
+        progFolder = os.path.join(dataFolder, "progression")  ## The PROGRESSION folder
+        inWKID = inSR.factoryCode  ## Establish the incident's spatial reference WKID
+
+        # Establish default workspace and set environment.
+        if not os.path.isdir(progFolder):  ## If there is no PROGRESSION folder
+            os.mkdir(progFolder)  ## Create the PROGRESSION folder
+        arcpy.env.workspace = progFolder  ## Establish the folder workspace
+        if not arcpy.Exists(progGDB):  ## If there is no progression GDB
+            arcpy.CreateFileGDB_management(progFolder, progGDB)  ## Create the progression GDB
+        arcpy.env.workspace = os.path.join(progFolder, progGDB)  ## Establish the GDB workspace
+        arcpy.env.overwriteOutput = True
+
+        # Prepare for date arithmetic.
+        if startDate:  ## If a start date has been specified
+            startDate = startDate.split(" ")[0]  ## The date-only portion of startDate
+            dateParts = startDate.split("/")  ## Parse startDate into its component parts
+            dateObject = datetime.date(int(dateParts[2]), int(dateParts[0]),
+                                       int(dateParts[1]))  ## Create a date object
+            dateChange = datetime.timedelta(days=1)  ## Set the date increment value to 1 day
+
+        # Validate user inputs.
+        arcpy.AddMessage("\nValidating user inputs...")
+        fcList = fcInputs.split(";")  ## Parse fcInputs into a Python list
+        inputCount = len(fcList)  ## Get a count of list elements
+        if inputCount < 2:  ## Test if 2, or more, feature class inputs were specified
+            arcpy.AddError(
+                "\nFATAL - At least two polygon inputs must be specified but only %s given..." % inputCount)
+            sys.exit()
+
+        for fc in fcList:
+            # Test if any inputs have spaces in their path or file name
+            if " " in fc:
+                ##### Copy to temporary file without spaces
+                arcpy.AddError("\n" + "FATAL - " + fc + "\n"
+                                                        "must not have spaces in its path or filename...")
+                sys.exit()
+
+            # Add a valid PROG_DATE field to any input that doesn't have a field named PROG_DATE
+            fieldList = arcpy.ListFields(fc, "prog_date")  ## Create a list of fields named "prog_date"
+            if not fieldList:  ## If the current feature class doesn't have a PROG_DATE field
+                arcpy.AddField_management(fc, "prog_date", "TEXT", "#", "#", "15")  ## Add a PROG_DATE field
+                arcpy.AddMessage("\n" + "Added a PROG_DATE field to " + os.path.basename(fc) + "...")
+
+            #### Pretty sure this is superfluous because the next test would ensure the input FC is projected
+            descFC = arcpy.Describe(fc)
+            if descFC.SpatialReference.Type.lower() != "projected":  ## Test if each feature class input is projected
+                arcpy.AddError("\n" + "FATAL - " + os.path.basename(fc) + "\n"
+                                                                          "must have a projected coordinate system...")
+                sys.exit()
+
+            fcWKID = descFC.SpatialReference.factoryCode
+            if fcWKID != inWKID:  ## Test if each feature class input matches the incident's spatial reference
+                #### Project on  the fly
+                arcpy.AddError("\n" + "FATAL - " + os.path.basename(fc) + "\n"
+                                                                          "must match the incident's spatial reference, WKID " + str(
+                    inWKID) + "...")
+                sys.exit()
+            if descFC.ShapeType != "Polygon":  ## Test if each feature class input has a polygon shape type
+                arcpy.AddError("\n" + "FATAL - " + os.path.basename(fc) + "\n"
+                                                                          "must have a polygon shape type...")
+                sys.exit()
+            fieldList = arcpy.ListFields(fc, "prog_date")  ## Create a list of fields named "prog_date"
+            for field in fieldList:
+                if field.type.lower() != "string":  ## Test if the PROG_DATE field type is TEXT
+                    arcpy.AddError("\n" + "FATAL - The PROG_DATE field in " + os.path.basename(fc) + "\n"
+                                                                                                     "must be a TEXT type field...")
+                    sys.exit()
+                if field.length < 15:  ## Test if the PROG_DATE field length is < 15
+                    arcpy.AddError("\n" + "FATAL - The PROG_DATE field in " + os.path.basename(fc) + "\n"
+                                                                                                     "must have a length of at least 15 characters...")
+                    sys.exit()
+                if not startDate:  ## Test if a starting date was not specified
+                    rows = arcpy.SearchCursor(fc)
+                    for row in rows:
+                        if row.prog_date in (
+                        "", " ", None):  ## Test if the PROG_DATE field value is a zero-length string or is NULL
+                            arcpy.AddError("\n" + "FATAL - The PROG_DATE field in " + os.path.basename(fc) + "\n"
+                                                                                                             "must be populated like 'YYYY-MM-DD' if a starting date is not specified...")
+                            del row, rows  ## Release the row and table locks
+                            sys.exit()
+        arcpy.AddMessage("\nAll user inputs are valid...")
+
+        # Delete scratch files, if they exist.
+        arcpy.AddMessage("\n" + "Deleting scratch files, if they exist...")
+        scratchFCs = arcpy.ListFeatureClasses("xxProg*", "Polygon")
+        for fc in scratchFCs:
+            arcpy.Delete_management(fc)
+
+        # Copy the first feature class input to xxProg0.
+        arcpy.AddMessage("\nProcessing inputs...")
+        arcpy.AddMessage("   > " + os.path.basename(fcList[0]) + "...")
+        arcpy.CopyFeatures_management(fcList[0], os.path.join(progFolder, progGDB, "xxProg0"))
+
+        # If an unbroken series of progression dates was indicated by the user, calculate PROG_DATE as the starting date of that series.
+        if startDate:
+            arcpy.CalculateField_management("xxProg0", "prog_date", '"' + dateObject.strftime("%Y-%m-%d") + '"')
+
+        # Cycle through each of the remaining feature class inputs.
+        for index in range(1, inputCount):  ##### change to enumerate
+            arcpy.AddMessage("   > " + os.path.basename(fcList[index]) + "...")
+            arcpy.CopyFeatures_management(fcList[index], os.path.join(progFolder, progGDB,
+                                                                      "xxProgTemp"))  ## Copy the current feature class input to xxProgTemp
+
+            # If an unbroken series of progression dates was indicated by the user, calculate PROG_DATE as the next date in that series.
+            if startDate:
+                dateObject = dateObject + dateChange  ## Increment the date by 1 day
+                arcpy.CalculateField_management("xxProgTemp", "prog_date",
+                                                '"' + dateObject.strftime("%Y-%m-%d") + '"')
+
+            # Perform the CLIP (if applicable) and UNION procedure(s).
+            if clipOK == "true":
+                arcpy.Clip_analysis("xxProg" + str(index - 1), "xxProgTemp",
+                                    "xxProg" + str(index - 1) + "Clip")  ## Clip prior period with current period
+                arcpy.Union_analysis(["xxProgTemp", "xxProg" + str(index - 1) + "Clip"], "xxProg" + str(index),
+                                     "NO_FID")  ## Union current period with clipped prior period
+            else:
+                arcpy.Union_analysis(["xxProgTemp", "xxProg" + str(index - 1)], "xxProg" + str(index),
+                                     "NO_FID")  ## Union current period with prior period
+            arcpy.Delete_management("xxProgTemp")
+        arcpy.CopyFeatures_management("xxProg" + str(index), "xxProg_Output")
+
+        # Calculate the PROG_DATE field value for each record in xxProg_Output to be
+        # the earliest (lowest) non-blank date value from among all of the unioned date fields.
+        arcpy.AddMessage("\n" + "Compiling dates...")
+        fieldList = arcpy.ListFields("xxProg_Output", "prog_date*")
+        fieldNames = ""
+        for field in fieldList:  ## For each PROG_DATE field in xxProg_Output
+            fieldNames = fieldNames + "!" + field.name + "!,"  ## Build a list of all of the PROG_DATE field names
+            xPression = "findZLSN(!" + field.name + "!)"  ## Set PROG_DATE fields with a zero-length string or NULL value to "9999-99-99-9999"
+            arcpy.CalculateField_management("xxProg_Output", field.name, xPression, "PYTHON_9.3", codeBlock2)
+        fieldNames = fieldNames[0:-1]  ## Strip off the trailing comma
+        arcpy.CalculateField_management("xxProg_Output", "prog_date", 'min(' + fieldNames + ')',
+                                        "PYTHON_9.3")  ## Calculate PROG_DATE as the earliest date
+
+        # Find the progression's most recent (largest) date, and use it as part of the progression feature class name.
+        rows = arcpy.SearchCursor("xxProg_Output")
+        maxDate = "0000-00-00-0000"
+        for row in rows:
+            if row.prog_date >= maxDate:
+                maxDate = row.prog_date
+        del row, rows  ## Release the row and table locks
+        maxDate = maxDate.replace("-", "")
+        progFcName = progGDB.replace("-", "")
+        outFC = "i_" + maxDate + progFcName[4:-4]  ## A name for the output progression feature class
+        outXls = os.path.join(progFolder, outFC[2:] + ".xls")  ## The output summary table in Excel format
+
+        # Dissolve xxProg_Output on the PROG_DATE field to produce outFC.
+        arcpy.Dissolve_management("xxProg_Output", outFC, ["prog_date"])
+        arcpy.AlterField_management(outFC, "prog_date", "#", "Date")  ## Rename the PROG_DATE field to DATE
+
+        # Add the GROWTH_AC, TOTAL_AC, and LEGEND_TEXT fields to outFC, and calculate their values.
+        arcpy.AddMessage("\n" + "Calculating growth and total acres...")
+        arcpy.AddField_management(outFC, "growth_ac", "DOUBLE", "#", "#", "#",
+                                  "Growth Ac")  ## Add a GROWTH_AC numeric field
+        arcpy.AddField_management(outFC, "total_ac", "LONG", "#", "#", "#",
+                                  "Total Ac")  ## Add a TOTAL_AC numeric field
+        arcpy.AddField_management(outFC, "legend_text", "TEXT", "#", "#", "50",
+                                  "Legend Text")  ## Add a LEGEND_TEXT text field
+        arcpy.AddField_management(outFC, "tmp_Growth", "TEXT", "#", "#", "15",
+                                  "Temp Growth")  ## Add a temporary TMP_GROWTH text field
+        arcpy.AddField_management(outFC, "tmp_Total", "TEXT", "#", "#", "15",
+                                  "Temp Total")  ## Add a temporary TMP_TOTAL text field
+
+        # Calculate GROWTH_AC.
+        arcpy.CalculateField_management(outFC, "growth_ac", "!shape.area@acres!", "PYTHON_9.3")
+
+        # Calculate TOTAL_AC as a running sum of GROWTH_AC, and then round GROWTH_AC to a whole number.
+        xPression = "accumulateTotal(!growth_ac!)"
+        arcpy.CalculateField_management(outFC, "total_ac", xPression, "PYTHON_9.3", codeBlock1)
+        arcpy.CalculateField_management(outFC, "growth_ac", "round(!growth_ac!, 0)", "PYTHON_9.3")
+
+        # Find the maximum GROWTH_AC and TOTAL_AC field values.
+        with arcpy.da.SearchCursor(outFC, ["growth_ac"]) as rows:  ## Find the max value in the GROWTH_AC field
+            maxGroAc = 0
+            for row in rows:
+                if row[0] > maxGroAc:
+                    maxGroAc = int(round(row[0], 0))  ## Round and make an integer of maxGroAc
+                    lenGroAc = len(str(maxGroAc))  ## Cast maxGroAc as a string and find its length
+        with arcpy.da.SearchCursor(outFC, ["total_ac"]) as rows:  ## Find the max value in the TOTAL_AC field
+            maxTotAc = 0
+            for row in rows:
+                if row[0] > maxTotAc:
+                    maxTotAc = row[0]
+                    lenTotAc = len(str(maxTotAc))  ## Cast maxTotAc as a string and find its length
+
+        # Define a dictionary that returns the number of text spaces required for a number that includes thousands separators.
+        dict = {1: 1, 2: 2, 3: 3, 4: 5, 5: 6, 6: 7, 7: 9, 8: 10, 9: 11, 10: 12}
+
+        # Calculate TMP_GROWTH and TMP_TOTAL fields as text representations of their corresponding numeric value
+        # with enough right-justification to accommodate the largest number.  Then, incorporate those right-justified
+        # text values into the LEGEND_TEXT field.  This is done to improve readability of the LEGEND_TEXT field.
+        expGro = "'{0:,.0f}'.format(!growth_ac!).rjust(" + str(dict[lenGroAc]) + ")"
+        expTot = "'{0:,.0f}'.format(!total_ac!).rjust(" + str(dict[lenTotAc]) + ")"
+        arcpy.CalculateField_management(outFC, "tmp_Growth", expGro, "PYTHON_9.3")
+        arcpy.CalculateField_management(outFC, "tmp_Total", expTot, "PYTHON_9.3")
+        arcpy.CalculateField_management(outFC, "legend_text",
+                                        '!prog_date! + "  " + !tmp_Growth! + " growth ac  " + !tmp_Total! + " total ac"',
+                                        "PYTHON_9.3")
+
+        # Delete the temporary TMP_GROWTH and TMP_TOTAL fields.
+        arcpy.DeleteField_management(outFC, "tmp_Growth")
+        arcpy.DeleteField_management(outFC, "tmp_Total")
+
+        # Write outFC's table to Excel format.
+        arcpy.AddMessage("\n" + "Writing an acreage summary table to Excel...")
+        arcpy.TableToExcel_conversion(outFC, outXls, "ALIAS")
+
+        # Signal successful completion.
+        # arcpy.RefreshCatalog(progFolder)  ## Refresh the ArcMap catalog view...not supported in ArcPro
+        arcpy.AddMessage("\n" + "OK, done!")
+        arcpy.AddMessage("\n" + "The new fire progression feature class is filed as:")
+        arcpy.AddMessage("   > " + progFolder + "\\")
+        arcpy.AddMessage("        " + os.path.join(progGDB, outFC))
+        arcpy.AddMessage("\n" + "The new fire progression summary Excel table is filed as:")
+        arcpy.AddMessage("   > " + os.path.dirname(outXls) + "\\")
+        arcpy.AddMessage("        " + os.path.basename(outXls))
+
+        '''except SystemExit:
+            pass
+        except:
+            arcpy.AddError("\n" + arcpy.GetMessages(2) + "\n")
+
+        finally:
+            # Delete all scratch files, and finish up.
+            arcpy.AddMessage("\n" + "Deleting scratch files...")
+            scratchFCs = arcpy.ListFeatureClasses("xxProg*", "Polygon")
+            for fc in scratchFCs:
+                arcpy.Delete_management(fc)
+            arcpy.AddMessage("\n")'''
+
+        return
+
+
+    def execute(self, parameters, messages):
+        return self.robo_copy_archive(
+            source_dir=parameters[0].valueAsText,
+            target_dir=parameters[1].valueAsText,
+            exclude_locks=parameters[2].value
+        )  # returns nothing, but that m
+
 
 
 
