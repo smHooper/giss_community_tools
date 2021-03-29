@@ -45,14 +45,16 @@ data edit and map update cycle in the sequence described below.
 
 4.  Update the incident archive using **RoboCopy Archive**.
 
-![arcgis catalog screenshot](media/image1.png)
-**Setup** - Copy the **RoboCopyArchive**
+![arcgis catalog screenshot](media/RoboCopyArchive1.png)
+## Setup
+Copy the **RoboCopyArchive**
 folder to the incident\'s **tools** folder. The toolbox, script, and
 guidance document will be visible when viewed in ArcCatalog, as
 illustrated at right.
 
-![image2](media/image2.png)**Use** - Double-click the **RoboCopy
-Archive** script icon and specify:
+![RoboCopyArchive2](media/RoboCopyArchive2.png)
+## Use - 
+Double-click the **RoboCopy Archive** script icon and specify:
 
 1.  The incident\'s root folder (on a NAS device mapped to **Z:** in
     this example)
@@ -64,12 +66,12 @@ Then click **OK**, and the archive session will commence. When complete,
 a log file listing and summarizing the session\'s transactions will be
 displayed, as seen below.
 
-![image3](media/image3.png)
+![RoboCopyArchive3](media/RoboCopyArchive3.png)
 
-![image4](media/image4.png)
+![RoboCopyArchive4](media/RoboCopyArchive4.png)
 
 ## Results
-![image5](media/image5.png)The result of an archive session is that
+![RoboCopyArchive5](media/RoboCopyArchive5.png)The result of an archive session is that
 all new, modified, and renamed files and folders will be copied to the
 archive folder. The **ArchiveLogs** folder accumulates each session\'s
 log files, as seen here.
@@ -101,7 +103,7 @@ The RoboCopy Archive tool has these characteristics.
     or locked files only once, and then will move on. Users are notified
     when files fail to copy, as illustrated below.
 
-![image6](media/image6.png)
+![RoboCopyArchive6](media/RoboCopyArchive6.png)
 
 Carl Beyerhelm
 
