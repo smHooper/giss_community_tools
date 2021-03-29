@@ -95,9 +95,16 @@ Example:
 ```
 python giss_community_tools_standard.pyt RoboCopyArchive c:\path\to\incident\root c:\path\to\target\archive\folder
 ``` 
-To get generic help run `python giss_community_tools_standard.pyt -h` or `python giss_community_tools_standard.pyt --help`
+To get generic help run 
+```python giss_community_tools_standard.pyt -h```  
+or 
+```python giss_community_tools_standard.pyt --help``` 
 
-Note that some arguments for running tools from the command line are slightly different than parameters in the tools GUI dialog in ArcGIS Pro. For instance, `CalculateGeometryAttribtes` accepts the EPSG numeric code for the incident spatial reference rather than the tool dialog's direct reference to a Spatial Reference object. To get detailed information on input parameters and other information, run `python giss_community_tools_standard.pyt <tool_class_name> -h` or `python giss_community_tools_standard.pyt <tool_class_name> --help` to get argument info.
+Note that some arguments for running tools from the command line are slightly different than parameters in the tools GUI dialog in ArcGIS Pro. For instance, `CalculateGeometryAttribtes` accepts the EPSG numeric code for the incident spatial reference rather than the tool dialog's direct reference to a Spatial Reference object. To get detailed information on input parameters and other information, run 
+```python giss_community_tools_standard.pyt <tool_class_name> -h``` 
+or 
+```python giss_community_tools_standard.pyt <tool_class_name> --help``` 
+to get argument info.
 
 
 
