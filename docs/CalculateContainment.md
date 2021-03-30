@@ -24,11 +24,11 @@ Follow these steps to install and use the widget.
 
 3.  Click the **Calc GIS Containment** button, and complete the dialog, as illustrated and described below.
 
-⋅⋅1. Drag and drop the current incident\'s **EventPolygon** feature class into the first control. Its **IncidentName** field is interrogated by the widget to develop a dropdown list of incident names for use in the second control.
+  1. Drag and drop the current incident\'s **EventPolygon** feature class into the first control. Its **IncidentName** field is interrogated by the widget to develop a dropdown list of incident names for use in the second control.
 
-⋅⋅2. Select the current incident\'s name from the dropdown list. Features from several incidents may be present in Event data, so the selected incident name is used to limit calculations to features from only that incident. GISS must ensure that **IncidentName** and **FeatureCategory** attribute values are complete and correct prior to use.
+  2. Select the current incident\'s name from the dropdown list. Features from several incidents may be present in Event data, so the selected incident name is used to limit calculations to features from only that incident. GISS must ensure that **IncidentName** and **FeatureCategory** attribute values are complete and correct prior to use.
 
-⋅⋅3. Select the current incident\'s projected spatial reference. The spatial reference is used to project GCS features in order to develop legitimate length values. Lengths will be calculated in the user-specified spatial reference regardless of whether the native spatial reference of **EventPolygon** and **EventLine** is **Projected** or **Geographic**.
+  3. Select the current incident\'s projected spatial reference. The spatial reference is used to project GCS features in order to develop legitimate length values. Lengths will be calculated in the user-specified spatial reference regardless of whether the native spatial reference of **EventPolygon** and **EventLine** is **Projected** or **Geographic**.
 
 4.  Click **OK** when all entries are set as desired.
 
