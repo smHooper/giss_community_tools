@@ -13,7 +13,7 @@
     Python tools for Geographic Information System Specialists for wildfire response
     <br />
     <br />
-    <a href="https://github.com/smHooper/giss_community_tools/issues">Report bug</a>
+    <a href="https://github.com/smHooper/giss_community_tools/issues">Report a bug</a>
     ·
     <a href="https://github.com/smHooper/giss_community_tools/issues">Request a new feature/tool</a>
   </p>
@@ -32,8 +32,8 @@
     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a>
       <ul>
-        <li><a href="#using-in-arcgis-pro">Using in ArcGIS Pro</a></li>
-        <li><a href="#using-from-the-command-line">Using from the command line</a></li>
+        <li><a href="#using-in-arcgis-pro">In ArcGIS Pro</a></li>
+        <li><a href="#using-from-the-command-line">From the command line</a></li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
@@ -53,7 +53,7 @@
 #### Standard tools
 Standard tools have all been tested to run in the currently recommended version of ArcGIS Pro and are actively maintained. These tools include 
 * Calculate Geometry Attributes
-* Calculate Containment
+* [Calculate Containment](https://github.com/smHooper/giss_community_tools/blob/main/docs/CalculateContainment.md)
 * Incident Period Backup
 * [RoboCopy Archive](https://github.com/smHooper/giss_community_tools/blob/main/docs/RoboCopyArchive.md)
 
