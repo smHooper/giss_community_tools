@@ -65,7 +65,7 @@ Beta tools provide automation for additional functionality or workflows not avai
 #### Legacy tools
 There are also other [legacy tools](https://github.com/smHooper/giss_community_tools/tree/main/legacy_tools) that have not been tested with currently recommended version of ArcGIS Pro. 
 <br><br>
-*** Note that all tools, including those in the standard toolbox, are all available _as is_ without any guarantee. Always backup your data and projects before modifying them, and use this tools at your own risk. (see [license](#license) for more information)
+*** Note that all tools, including those in the standard toolbox, are all available _as is_ without any guarantee. Always backup your data and projects before modifying them, and use these tools at your own risk. (see [license](#license) for more information)
 
 
 <!-- GETTING STARTED -->
