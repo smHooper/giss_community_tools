@@ -56,6 +56,7 @@ Standard tools have all been tested to run in the currently recommended version 
 * [Calculate Containment](https://github.com/smHooper/giss_community_tools/blob/main/docs/CalculateContainment.md)
 * Incident Period Backup
 * [RoboCopy Archive](https://github.com/smHooper/giss_community_tools/blob/main/docs/RoboCopyArchive.md)
+* Fire Progression
 
 #### Beta tools
 Beta tools provide automation for additional functionality or workflows not available in the standard tools. 
