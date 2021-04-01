@@ -78,7 +78,7 @@ The only requirement to use the **Community GISS Tools** is **ArcGIS Pro 2.7**. 
 1. [Download the tools](https://github.com/smHooper/giss_community_tools/archive/refs/heads/main.zip).
 2. Unzip the file (named **giss_community_tools-main.zip**)
 3. Copy the unzipped files into the **tools** folder of your incident's directory
-4. Open ArcGIS Pro or refresh the **tools** folder in Catalog. All standard tools will be in  **community_giss_toolbox.pyt** and any available beta tools will be in **community_giss_toolbox_beta.pyt**
+4. Open ArcGIS Pro or refresh the **tools** folder in Catalog. All standard tools will be in  **community_giss_toolbox_standard.pyt** and any available beta tools will be in **community_giss_toolbox_beta.pyt**
 
 
 
