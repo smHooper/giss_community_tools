@@ -78,7 +78,6 @@ The only requirement to use the **Community GISS Tools** is **ArcGIS Pro 2.7**. 
 1. [Download the tools](https://github.com/smHooper/giss_community_tools/archive/refs/heads/main.zip).
 2. Unzip the file (named **giss_community_tools-main.zip**)
 3. Copy the unzipped files into the **tools** folder of your incident's directory
-4. Open ArcGIS Pro or refresh the **tools** folder in Catalog. All standard tools will be in  **community_giss_toolbox_standard.pyt** and any available beta tools will be in **community_giss_toolbox_beta.pyt**
 
 
 
@@ -86,7 +85,7 @@ The only requirement to use the **Community GISS Tools** is **ArcGIS Pro 2.7**. 
 ## Usage
 
 #### Using in ArcGIS Pro
-From a **Catalog** window, expand the **Community GISS Tools** toolbox (or Community GISS Tools - beta to use [Beta tools](#beta-tools)) and open the tool of your choice. For usage of each tool, see the [documentation](https://github.com/smHooper/giss_community_tools/tree/main/docs).
+From a **Catalog** window, expand the **community_giss_tools_standard.pyt** toolbox (or community_giss_tools_beta.pyt to use [Beta tools](#beta-tools)) and open the tool of your choice. For usage of each tool, see the [documentation](https://github.com/smHooper/giss_community_tools/tree/main/docs).
 
 #### Using from the command line
 All tools in the Standard toolbox can be run from the command line if you have a Python environment with `arcpy` installed. See [ESRI's documentation](https://pro.arcgis.com/en/pro-app/latest/arcpy/get-started/using-conda-with-arcgis-pro.htm) on running standalone scripts or if you're using an independent Anaconda installation, [create your own ArcPy environment](https://gis.stackexchange.com/a/202704). Tools can be run with the following example command
