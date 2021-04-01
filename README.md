@@ -85,7 +85,7 @@ The only requirement to use the **Community GISS Tools** is **ArcGIS Pro 2.7**. 
 ## Usage
 
 #### Using in ArcGIS Pro
-From a **Catalog** window, expand the **Community GISS Tools** toolbox (or Community GISS Tools - beta to user [Beta tools](#beta-tools)) and open the tool of your choice. For usage of each tool, see the (documentation)[https://github.com/smHooper/giss_community_tools/tree/main/docs].
+From a **Catalog** window, expand the **Community GISS Tools** toolbox (or Community GISS Tools - beta to use [Beta tools](#beta-tools)) and open the tool of your choice. For usage of each tool, see the [documentation](https://github.com/smHooper/giss_community_tools/tree/main/docs).
 
 #### Using from the command line
 All tools in the Standard toolbox can be run from the command line if you have a Python environment with `arcpy` installed. See [ESRI's documentation](https://pro.arcgis.com/en/pro-app/latest/arcpy/get-started/using-conda-with-arcgis-pro.htm) on running standalone scripts or if you're using an independent Anaconda installation, [create your own ArcPy environment](https://gis.stackexchange.com/a/202704). Tools can be run with the following example command
