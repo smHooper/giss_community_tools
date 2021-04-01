@@ -28,7 +28,7 @@
     <li>
       <a href="#about">About the project</a>
     </li>
-    <li><a href="#requirements">Prerequisites</a></li>
+    <li><a href="#requirements">Requirements</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a>
       <ul>
