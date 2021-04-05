@@ -85,26 +85,26 @@ The only requirement to use the **Community GISS Tools** is **ArcGIS Pro 2.7**. 
 ## Usage
 
 #### Using in ArcGIS Pro
-From a **Catalog** window, expand the **community_giss_tools_standard.pyt** toolbox (or community_giss_tools_beta.pyt to use [Beta tools](#beta-tools)) and open the tool of your choice. For usage of each tool, see the [documentation](https://github.com/smHooper/giss_community_tools/tree/main/docs).
+From a **Catalog** window, expand the **community_giss_toolbox.pyt** toolbox (or community_giss_toolbox_beta.pyt to use [Beta tools](#beta-tools)) and open the tool of your choice. For usage of each tool, see the [documentation](https://github.com/smHooper/giss_community_tools/tree/main/docs).
 
 #### Using from the command line
 All tools in the Standard toolbox can be run from the command line if you have a Python environment with `arcpy` installed. See [ESRI's documentation](https://pro.arcgis.com/en/pro-app/latest/arcpy/get-started/using-conda-with-arcgis-pro.htm) on running standalone scripts or if you're using an independent Anaconda installation, [create your own ArcPy environment](https://gis.stackexchange.com/a/202704). Tools can be run with the following example command
 ```
-python giss_community_tools_standard.pyt <tool_class_name> <tool_argument1> <tool_argument2>...
+python giss_community_toolbox.pyt <tool_class_name> <tool_argument1> <tool_argument2>...
 ```  
 Example:
 ```
-python giss_community_tools_standard.pyt RoboCopyArchive c:\path\to\incident\root c:\path\to\target\archive\folder
+python giss_community_toolbox.pyt RoboCopyArchive c:\path\to\incident\root c:\path\to\target\archive\folder
 ``` 
 To get generic help run <br>
-```python giss_community_tools_standard.pyt -h```  
+```python giss_community_toolbox.pyt -h```  
 or <br>
-```python giss_community_tools_standard.pyt --help``` 
+```python giss_community_toolbox.pyt --help``` 
 
 Note that some arguments for running tools from the command line are slightly different than parameters in the tools GUI dialog in ArcGIS Pro. For instance, `CalculateGeometryAttribtes` accepts the EPSG numeric code for the incident spatial reference rather than the tool dialog's direct reference to a Spatial Reference object. To get detailed information on input parameters and other information, run <br>
-```python giss_community_tools_standard.pyt <tool_class_name> -h``` 
+```python giss_community_toolbox.pyt <tool_class_name> -h``` 
 or <br>
-```python giss_community_tools_standard.pyt <tool_class_name> --help``` 
+```python giss_community_toolbox.pyt <tool_class_name> --help``` 
 to get argument info.
 
 
@@ -120,7 +120,7 @@ We _gladly accept_ contributions for new tools, new features, and bug fixes from
 4. Push to the branch (`git push origin feature/cool-feature`)
 5. Open a pull request
 
-All new tools should be added to the [Beta toolbox](https://github.com/smHooper/giss_community_tools). With time and discussion among users and contributors, beta tools can be moved to the Standard toolbox. [Submit an issue](https://github.com/smHooper/giss_community_tools/issues) if you would like a tool in the Beta toolbox to be considered for the Standard toolbox.
+All new tools should be added to the [Beta toolbox](https://github.com/smHooper/giss_community_tools/blob/main/community_giss_toolbox_beta.pyt). With time and discussion among users and contributors, beta tools can be moved to the Standard toolbox. [Submit an issue](https://github.com/smHooper/giss_community_tools/issues) if you would like a tool in the Beta toolbox to be considered for the Standard toolbox.
 
 
 <!-- LICENSE -->
