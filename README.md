@@ -120,7 +120,9 @@ We _gladly accept_ contributions for new tools, new features, and bug fixes from
 4. Push to the branch (`git push origin feature/cool-feature`)
 5. Open a pull request
 
-All new tools should be added to the [Beta toolbox](https://github.com/smHooper/giss_community_tools/blob/main/community_giss_toolbox_beta.pyt). With time and discussion among users and contributors, beta tools can be moved to the Standard toolbox. [Submit an issue](https://github.com/smHooper/giss_community_tools/issues) if you would like a tool in the Beta toolbox to be considered for the Standard toolbox.
+All new tools should be added to the [Beta toolbox](https://github.com/smHooper/giss_community_tools/blob/main/community_giss_toolbox_beta.pyt). With time and discussion among users and contributors, beta tools can be moved to the Standard toolbox. [Submit an issue](https://github.com/smHooper/giss_community_tools/issues) if you would like a tool in the Beta toolbox to be considered for the Standard toolbox. 
+<br><br>
+To add a new tool to the Beta toolbox, use the example tool class as a model and extend the `BetaBaseTool` class. In particular, be sure to include `super().execute()` in your tool's `.execute()` method [as seen here](https://github.com/smHooper/giss_community_tools/blob/90c9e8e28c37fa825f6f63b968a6af4e2a6a4710/community_giss_toolbox_beta.pyt#L140).
 
 
 <!-- LICENSE -->
