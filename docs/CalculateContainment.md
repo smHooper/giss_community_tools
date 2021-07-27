@@ -14,25 +14,22 @@ An **incident's percent containment** is reported by the Situation Unit Leader i
 * Divided by the summed projected length of a fire\'s **exterior** perimeter(s).
 * Multiplied by 100.
 
-![][1]
+
 ## Install and use
 Follow these steps to install and use the widget.
 
-1.  Download the **cTools** toolbar add-in from this [**link**,] and install it for use in ArcMap 10x.
 
-2.  Open ArcMap and, if it is not already visible, click **Customize -- Toolbars** to activate the **cTools** toolbar. Dock the toolbar in any convenient location.
-
-3.  Click the **Calc GIS Containment** button, and complete the dialog, as illustrated and described below.
+1.  From a Catalog window, open the **Calc GIS Containment** tool, and complete the dialog, as illustrated and described below.
 
     * Drag and drop the current incident\'s **EventPolygon** feature class into the first control. Its **IncidentName** field is interrogated by the widget to develop a dropdown list of incident names for use in the second control.
 
     * Select the current incident\'s name from the dropdown list. Features from several incidents may be present in Event data, so the selected incident name is used to limit calculations to features from only that incident. GISS must ensure that **IncidentName** and **FeatureCategory** attribute values are complete and correct prior to use.
 
     * Select the current incident\'s projected spatial reference. The spatial reference is used to project GCS features in order to develop legitimate length values. Lengths will be calculated in the user-specified spatial reference regardless of whether the native spatial reference of **EventPolygon** and **EventLine** is **Projected** or **Geographic**.
-
-4.  Click **OK** when all entries are set as desired.
-
 ![][2]
+
+2.  Click **OK** when all entries are set as desired.
+
 
 ## Results
 The widget returns a report that summarizes inputs, exterior fire perimeter and exterior uncontrolled fire edge lengths, and the percent of GIS containment, as seen below.
@@ -40,6 +37,5 @@ The widget returns a report that summarizes inputs, exterior fire perimeter and 
 ![][3]
 
   [1]: media/CalculateContainment1.png
-  [**link**,]: https://drive.google.com/file/d/13tYWH5feHFKldbYaPMrzKQSwc8mkpAfP/view?usp=sharing
   [2]: media/CalculateContainment2.png 
   [3]: media/CalculateContainment3.png
